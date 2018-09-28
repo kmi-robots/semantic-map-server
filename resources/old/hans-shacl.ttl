@@ -1,0 +1,447 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix hsf: <http://data.open.ac.uk/kmi/hans#> .
+@prefix ros: <http://data.open.ac.uk/kmi/ros#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix geof: <http://www.opengis.net/def/function/geosparql/> .
+
+# SHACL CONSTRAINT
+hsf:EntityShape a sh:NodeShape ;
+	sh:targetClass hsf:Entity ;
+	sh:property [
+		sh:description "A hsf:Entity must have one and only one timestamp, corresponding to the time when the entity has been inserted in the KB" ;
+		sh:path hsf:hasTimestamp ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:unsignedLong ;
+	] ;
+	sh:property [
+		sh:description "A hsf:Entity can have a unique id, when it the product of an Identification process" ;
+		sh:path hsf:hasId ;
+		sh:datatype xsd:string ;
+	] ;
+	sh:property [
+		sh:description "A hsf:Entity must have a geometry of type geo:Geometry" ;
+		sh:path geo:hasGeometry ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:class geo:Geometry ;
+	] .
+
+hsf:PointHavePoseShape a sh:NodeShape ;
+	sh:description "Each entity which has a geo:Geometry that is a geo:Point, must have a ros:Pose" ;
+	sh:target [
+		a sh:SPARQLTarget ;
+		sh:prefixes [ 
+			sh:declare [
+				sh:prefix "geo" ;
+				sh:namespace "http://www.opengis.net/ont/geosparql#"^^xsd:anyURI ;
+			] ;
+			sh:declare [
+				sh:prefix "hsf" ;
+				sh:namespace "http://data.open.ac.uk/kmi/hans#"^^xsd:anyURI ;
+			] ;
+			sh:declare [
+				sh:prefix "rdfs" ;
+				sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ;
+			] ;
+			sh:declare [
+				sh:prefix "rdf" ;
+				sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ;
+			]
+		 ] ;
+		sh:select """
+			SELECT ?this
+			WHERE {
+				?this rdf:type/rdfs:subClassOf* hsf:Entity .
+				?this geo:hasGeometry ?c .
+				?c rdf:type/rdfs:subClassOf* geo:Point .
+			}
+			""" ;
+	] ;
+	sh:property [
+		sh:description "" ;
+		sh:path hsf:hasPose ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:class ros:Pose ;
+	] .
+
+ros:PoseShape a sh:NodeShape ;
+	sh:targetClass ros:Pose ;
+	sh:property [
+		sh:description "A ros:Pose must have one Position of class ros:Point" ;
+		sh:path ros:hasPosition ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:class ros:Point ;
+	] ;
+	sh:property [
+		sh:description "A ros:Pose must have one Orientation of class ros:Quaternion" ;
+		sh:path ros:hasOrientation ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:class ros:Quaternion ;
+	] .
+	
+ros:PointShape a sh:NodeShape ;
+	sh:targetClass ros:Point ;
+	sh:property [
+		sh:description "A ros:Point must have one X of type double" ;
+		sh:path ros:hasX ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	] ;
+	sh:property [
+		sh:description "A ros:Point must have one Y of type double" ;
+		sh:path ros:hasY ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	] ;
+		sh:property [
+		sh:description "A ros:Point must have one Z of type double" ;
+		sh:path ros:hasZ ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	] .
+	
+ros:QuaternionShape a sh:NodeShape ;
+	sh:targetClass ros:Quaternion ;
+	sh:property [
+		sh:description "A ros:Quaternion must have one X of type double" ;
+		sh:path ros:hasX ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	] ;
+	sh:property [
+		sh:description "A ros:Quaternion must have one Y of type double" ;
+		sh:path ros:hasY ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	] ;
+		sh:property [
+		sh:description "A ros:Quaternion must have one Z of type double" ;
+		sh:path ros:hasZ ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	] ;
+		sh:property [
+		sh:description "A ros:Quaternion must have one W of type double" ;
+		sh:path ros:hasW ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	]  .
+	
+geo:PointShape a sh:NodeShape ;
+	sh:targetClass geo:Point ;
+	sh:property [
+		sh:description "A geo:Point must have a wkt string starting with POINT" ;
+		sh:path geo:asWKT ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype geo:WktLiteral ;
+		sh:pattern "^\\s*POINT" ;
+	] .
+	
+geo:LineStringShape a sh:NodeShape ;
+	sh:targetClass geo:LineString ;
+	sh:property [
+		sh:description "A geo:LineString must have a wkt string starting with LINESTRING" ;
+		sh:path geo:asWKT ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype geo:WktLiteral ;
+		sh:pattern "^\\s*LINESTRING" ;
+	] .
+	
+geo:PolygonShape a sh:NodeShape ;
+	sh:targetClass geo:Polygon ;
+	sh:property [
+		sh:description "A geo:Polygon must have a wkt string starting with POLYGON" ;
+		sh:path geo:asWKT ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype geo:WktLiteral ;
+		sh:pattern "^\\s*POLYGON" ;
+	] .
+
+# SMALL ONTOLOGY
+hsf:Entity rdfs:subClassOf owl:Class .
+
+# GENERAL CATEGORIES OF ENTITIES
+hsf:Object rdfs:subClassOf hsf:Entity .
+hsf:Area rdfs:subClassOf hsf:Entity .
+hsf:Connection rdfs:subClassOf hsf:Entity .
+
+[]  rdf:type     owl:AllDisjointClasses ;
+	owl:members ( hsf:Object hsf:Connection hsf:Area ) .
+
+hsf:Heater rdfs:subClassOf hsf:Object .
+hsf:Room rdfs:subClassOf hsf:Area .
+
+ros:Geometry rdfs:subClassOf owl:Class .
+ros:GeometricProperty rdfs:subClassOf owl:Class .
+
+# the need of ros:Point (instead of using geo:Point) derives from the fact that
+# to be completely compliant with ROS, a point need to have x,y and z. Unfortunately,
+# the actual implementation of JTKc(and GeoSparql) does not deal properly with 3d coordinates
+# so JTS points are represented only with X and Y. Z is just accessory.
+ros:Pose rdfs:subClassOf ros:GeometricProperty .
+ros:Point rdfs:subClassOf ros:Geometry .
+ros:Quaternion rdfs:subClassOf ros:Geometry .
+
+geo:Point rdfs:subClassOf geo:Geometry .
+geo:LineString rdfs:subClassOf geo:Geometry .
+geo:Polygon rdfs:subClassOf geo:Geometry .
+
+# SHACL RULES FOR HEALT&SAFETY RULES
+# ELECTRIC HEATER FREE AREAS
+# rule asserting that no Electric Heater should be present in
+# heater free areas
+hsf:heaterFreeAreaRule a sh:NodeShape;
+  sh:targetClass hsf:HeaterFreeArea ;
+  rdfs:comment "Rule checking whether there are electric heaters in electric heaters free area";
+  sh:sparql [
+   a          sh:SPARQLConstraint ;
+   sh:message "{?hname} can't be in {?name}";
+   sh:prefixes [
+     sh:declare [
+                sh:prefix    "schema" ;
+                sh:namespace "http://schema.org/"^^xsd:anyURI ;
+        ];
+     sh:declare [
+
+                sh:prefix "hsf" ;
+                sh:namespace "http://data.open.ac.uk/kmi/hans/"^^xsd:anyURI ; 
+        ]
+   ] ;
+   sh:select
+    """
+    	SELECT $this ?hname ?name
+         WHERE {
+         ?heater  a hsf:Heater .
+         ?heater hsf:hasShape ?point .
+         ?point  hsf:hasXCoordinate ?hx .
+         ?point  hsf:hasYCoordinate ?hy  .
+         ?heater  schema:name ?hname .
+         $this  schema:name ?name .
+         $this hsf:hasShape ?shape .
+         ?shape hsf:southWestXCoordinate ?swx .
+         ?shape hsf:southWestYCoordinate ?swy .
+         ?shape hsf:northEastXCoordinate ?nex .
+         ?shape hsf:northEastYCoordinate ?ney .
+         FILTER((?hx >= ?swx && ?hy >= ?swy) && (?hx <= ?nex && ?hy <= ?ney))
+    }""" ;
+ ] .
+
+# FIRE EXIT POINTS
+# rule asserting that every emergency exit should have a
+# fire action notice in the surrounding area (fire exit point
+# is represented as an area)
+hsf:fireActionNoticeRule a sh:NodeShape;
+  sh:targetClass hsf:FireExitPoint ;
+  rdfs:comment "Rule checking whether fire exit points are provided with fire action notices";
+  sh:sparql [
+   a          sh:SPARQLConstraint ;
+   sh:message "{?name} has no fire action notice";
+   sh:prefixes [
+     sh:declare [
+                sh:prefix "hsf" ;
+                sh:namespace "http://data.open.ac.uk/kmi/hans/"^^xsd:anyURI ; 
+        ];
+     sh:declare [
+                sh:prefix    "schema" ;
+                sh:namespace "http://schema.org/"^^xsd:anyURI ;
+        ]
+   ] ;
+   sh:select
+    """
+    			SELECT $this ?name WHERE {
+    			$this hsf:hasShape ?shape .
+				?shape hsf:southWestXCoordinate ?swx . 
+		 		?shape hsf:southWestYCoordinate ?swy . 
+		 		?shape hsf:northEastXCoordinate ?nex .
+		 		?shape hsf:northEastYCoordinate ?ney .
+		 		$this schema:name ?name .
+		 		FILTER NOT EXISTS {
+		 		  ?signal a hsf:FireActionNotice .
+		 		  ?signal hsf:hasShape ?point .
+				  ?point  hsf:hasXCoordinate ?sx .
+				  ?point  hsf:hasYCoordinate ?sy .
+				  FILTER((?sx >= ?swx && ?sy >= ?swy) && (?sx <= ?nex && ?sy <= ?ney))
+		 		}
+		}""" ;
+ ] .
+
+# FIRE EXTINGUISHER LABELS
+# rule asserting that every fire extinguisher should have a clear
+# label in the nearby (fire extinguishers are represented as points)
+hsf:fireExtinguisherLabelRule a sh:NodeShape;
+  sh:targetClass hsf:FireExtinguisher ;
+  rdfs:comment "Rule checking whether fire extinguishers are properly labelled";
+  sh:sparql [
+   a          sh:SPARQLConstraint ;
+   sh:message "{?name} has no label nearby";
+   sh:prefixes [
+     sh:declare [
+                sh:prefix "hsf" ;
+                sh:namespace "http://data.open.ac.uk/kmi/hans/"^^xsd:anyURI ; 
+        ];
+     sh:declare [
+                sh:prefix    "schema" ;
+                sh:namespace "http://schema.org/"^^xsd:anyURI ;
+        ];
+      sh:declare [
+                sh:prefix    "math" ;
+                sh:namespace "http://www.w3.org/2005/xpath-functions/math#"^^xsd:anyURI ;
+        ]
+   ] ;
+   sh:select
+    """
+    	SELECT $this ?name WHERE {
+    		$this hsf:hasShape ?point .
+			?point hsf:hasXCoordinate ?fex . 
+		 	?point hsf:hasYCoordinate ?fey .
+		 	$this schema:name ?name .
+		 	FILTER NOT EXISTS {
+		 		?fel a hsf:FireExtinguisherLabel . 
+		 		?fel hsf:hasShape ?felPoint .
+				?felPoint  hsf:hasXCoordinate ?felx .
+				?felPoint  hsf:hasYCoordinate ?fely .
+				FILTER(math:sqrt( math:pow((?fex - ?felx), 2) + math:pow((?fey - ?fely), 2)) < 2)
+		 	}
+		}""" ;
+ ] .
+ 
+ 
+ 
+# INSTANCES 
+# HEATERS
+hsf:heater1 a hsf:Heater ;
+	schema:name "Heater 1" ;
+	hsf:hasShape hsf:heater1Point .
+
+hsf:heater1Point a hsf:PointShape ;
+	hsf:hasXCoordinate 3 ;
+	hsf:hasYCoordinate 3 .
+
+:heater2 a hsf:Heater ;
+	schema:name "Heater 2" ;
+	hsf:hasShape hsf:heater2Point .
+
+hsf:heater2Point a hsf:PointShape ;
+	hsf:hasXCoordinate 14 ;
+	hsf:hasYCoordinate 14 .
+
+hsf:heater3 a hsf:Heater ;
+	schema:name "Heater 3" ;
+	hsf:hasShape hsf:heater3Point .
+
+hsf:heater3Point a hsf:PointShape ;
+	hsf:hasXCoordinate 4 ;
+	hsf:hasYCoordinate 0 .
+
+hsf:heater4 a hsf:Heater ;
+	schema:name "Heater 4" ;
+	hsf:hasShape hsf:heater4Point .
+
+hsf:heater4Point a hsf:PointShape ;
+	hsf:hasXCoordinate 10 ;
+	hsf:hasYCoordinate 10 .
+
+# FIRE EXTINGUISHERS
+hsf:fireExt1 a hsf:FireExtinguisher ;
+	schema:name "Fire extinguisher 1" ;
+	hsf:hasShape hsf:fireExt1Point .
+
+hsf:fireExt1Point a hsf:PointShape ;
+	hsf:hasXCoordinate 1 ;
+	hsf:hasYCoordinate 1 .
+
+hsf:fireExt2 a hsf:FireExtinguisher ;
+	schema:name "Fire extinguisher 2" ;
+	hsf:hasShape hsf:fireExt2Point .
+
+hsf:fireExt2Point a hsf:PointShape ;
+	hsf:hasXCoordinate 6 ;
+	hsf:hasYCoordinate 6 .
+
+# FIRE EXTINGUISHER LABELS
+hsf:fireExtLabel1 a hsf:FireExtinguisherLabel ;
+	schema:name "Fire extinguisher label 1" ;
+	hsf:hasShape hsf:fireExtLabel1Point .
+
+hsf:fireExtLabel1Point a hsf:PointShape ;
+	   	hsf:hasXCoordinate 1.5 ;
+		hsf:hasYCoordinate 1.5 .
+
+# FIRE ACTION NOTICES
+hsf:faNotice1 a hsf:FireActionNotice ;
+	schema:name "Fire action notice 1" ;
+	hsf:hasShape hsf:faNotice1Point .
+
+hsf:faNotice1Point a hsf:PointShape ;
+	hsf:hasXCoordinate 30 ;
+	hsf:hasYCoordinate 30 .
+
+hsf:faNotice2 a hsf:FireActionNotice ;
+	schema:name "Fire action notice 2" ;
+	hsf:hasShape hsf:faNotice2Point .
+
+hsf:faNotice2Point a hsf:PointShape ;
+	hsf:hasXCoordinate 10 ;
+	hsf:hasYCoordinate 10 .
+
+# FIRE EXIT POINTS
+hsf:fePoint1 a         hsf:FireExitPoint ;          
+       schema:name  "Fire Exit Point 1" ;
+	   hsf:hasShape hsf:fePoint1Rect .
+
+hsf:fePoint1Rect a hsf:RectShape ;
+       hsf:southWestXCoordinate 8 ;
+       hsf:southWestYCoordinate 9 ;
+       hsf:northEastXCoordinate 11 ;
+       hsf:northEastYCoordinate 11 .
+       
+hsf:fePoint2 a         hsf:FireExitPoint ;          
+       schema:name  "Fire Exit Point 2" ;
+	   hsf:hasShape hsf:fePoint2Rect .
+
+hsf:fePoint2Rect a hsf:RectShape ;
+	   hsf:southWestXCoordinate 0 ;
+       hsf:southWestYCoordinate 0 ;
+       hsf:northEastXCoordinate 1 ;
+       hsf:northEastYCoordinate 1 .
+       
+# HEATER FREE AREA
+hsf:playroom a         hsf:HeaterFreeArea ;          
+       schema:name  "Playroom" ;
+	   hsf:hasShape hsf:playroomRect .
+
+hsf:playroomRect a hsf:RectShape ;
+	   hsf:southWestXCoordinate 3 ;
+       hsf:southWestYCoordinate -3 ;
+       hsf:northEastXCoordinate 6 ;
+       hsf:northEastYCoordinate 0 .
+
+hsf:activity2 a         hsf:HeaterFreeArea ;          
+       schema:name  "Activity 2" ;
+	   hsf:hasShape hsf:activity2Rect .
+       
+hsf:activity2Rect a hsf:RectShape ; 
+	   hsf:southWestXCoordinate 1 ;
+       hsf:southWestYCoordinate 2 ;
+       hsf:northEastXCoordinate 4 ;
+       hsf:northEastYCoordinate 5 .
+  

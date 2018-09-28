@@ -1,0 +1,34 @@
+curl -X GET http://127.0.0.1:7070/query/list/rules
+
+curl -X GET -G "http://127.0.0.1:7070/query/list/rule-waypoints" --data-urlencode "rule=http://data.open.ac.uk/kmi/hans#fireActionNoticeRule"
+
+NO curl -X GET -G "http://127.0.0.1:7070/query/list/rule-waypoints" --data-urlencode "rule=hsf:fireActionNoticeRule"
+
+curl -X POST http://127.0.0.1:7070/validate
+
+curl -X POST -G http://127.0.0.1:7070/validate/rule --data-urlencode "rule=http://data.open.ac.uk/kmi/hans#fireActionNoticeRule" 
+
+NO curl -X POST -G http://127.0.0.1:7070/validate/rule --data-urlencode "rule=hsf:fireActionNoticeRule"
+
+curl -X POST http://127.0.0.1:7070/insert/entity -d "json={\"category\":\"object\", \"class\":\"Heater\", \"timestamp\":1535983132000, \"geometry\":{\"geom_class\":\"point\", \"pose\":{\"position\":{\"x\":13.0, \"y\":11.0, \"z\":1.0}, \"orientation\":{\"x\":0.0, \"y\":0.0, \"z\":0.0, \"w\":1.0}}}}"
+
+curl -X POST http://127.0.0.1:7070/submit/sensing -d "sensing={\"detections\":[{\"category\":\"object\", \"class\":\"Heater\", \"timestamp\":1535983132000, \"geometry\":{\"geom_class\":\"point\", \"pose\":{\"position\":{\"x\":3.0, \"y\":1.0, \"z\":0.0}, \"orientation\":{\"x\":0.0, \"y\":0.0, \"z\":0.0, \"w\":1.0}}}}, {\"category\":\"area\", \"class\":\"Room\", \"id\":\"Playroom\", \"timestamp\":1535983132000, \"geometry\":{\"geom_class\":\"area\", \"points\":[{\"x\":0.0, \"y\":0.0, \"z\":0.0},{\"x\":4.0, \"y\":0.0, \"z\":0.0},{\"x\":4.0, \"y\":7.0, \"z\":0.0},{\"x\":0.0, \"y\":7.0, \"z\":0.0},{\"x\":0.0, \"y\":0.0, \"z\":0.0}]}}]}"
+
+curl -X POST http://127.0.0.1:7070/insert/entity -d "json={\"category\":\"connection\", \"class\":\"Connection\", \"id\":\"PlayroomDoor\", \"timestamp\":1535983132000, \"geometry\":{\"geom_class\":\"line\", \"points\":[{\"x\":-3.0, \"y\":-3.0, \"z\":0.0},{\"x\":3.0, \"y\":-3.0, \"z\":0.0},{\"x\":3.0, \"y\":3.0, \"z\":0.0}]}}"
+
+curl -X GET -G http://127.0.0.1:7070/query/entity --data-urlencode "entity_uri=http://data.open.ac.uk/kmi/hans#PodiumEntrance" 
+
+curl -X GET -G http://127.0.0.1:7070/query/entity --data-urlencode "entity_uri=http://data.open.ac.uk/kmi/hans#Heater_f39a621d-a90e-47b4-8acd-170550991520" 
+
+curl -X DELETE -G http://127.0.0.1:7070/delete/entity --data-urlencode "entity_uri=http://data.open.ac.uk/kmi/hans#Heater_308e1795-2cff-4a4a-beb4-92100681bf11" 
+
+# Insert (heater free) area, and then an heater, and then validate
+curl -X POST http://127.0.0.1:7070/insert/entity -d "json={\"category\":\"area\", \"class\":\"HeaterFreeArea\", \"id\":\"Playroom\", \"timestamp\":1535983132000, \"geometry\":{\"geom_class\":\"area\", \"points\":[{\"x\":-3.0, \"y\":-3.0, \"z\":0.0},{\"x\":3.0, \"y\":-3.0, \"z\":0.0},{\"x\":3.0, \"y\":3.0, \"z\":0.0},{\"x\":-3.0, \"y\":3.0, \"z\":0.0},{\"x\":-3.0, \"y\":-3.0, \"z\":0.0}]}}"
+curl -X POST http://127.0.0.1:7070/insert/entity -d "json={\"category\":\"object\", \"class\":\"Heater\", \"timestamp\":1535983132000, \"geometry\":{\"geom_class\":\"point\", \"pose\":{\"position\":{\"x\":0.0, \"y\":0.0, \"z\":0.0}, \"orientation\":{\"x\":0.0, \"y\":0.0, \"z\":0.0, \"w\":1.0}}}}"
+curl -X POST http://127.0.0.1:7070/validate
+
+# TODOS
+query all entities of a class
+query all entities
+query an entity instance
+query classes which affect

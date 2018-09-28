@@ -1,0 +1,126 @@
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix : <http://data.open.ac.uk/hans/shacl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix hsf: <http://data.open.ac.uk/kmi/hans/> .
+
+# ELECTRIC HEATER FREE AREAS
+# rule asserting that no Electric Heater should be present in
+# heater free areas
+hsf:heaterFreeAreaRule a sh:NodeShape;
+  sh:targetClass hsf:HeaterFreeArea ;
+  rdfs:comment "Rule checking whether there are electric heaters in electric heaters free area";
+  sh:sparql [
+   a          sh:SPARQLConstraint ;
+   sh:message "{?hname} can't be in {?name}";
+   sh:prefixes [
+     sh:declare [
+                sh:prefix    "schema" ;
+                sh:namespace "http://schema.org/"^^xsd:anyURI ;
+        ];
+     sh:declare [
+
+                sh:prefix "hsf" ;
+                sh:namespace "http://data.open.ac.uk/kmi/hans/"^^xsd:anyURI ; 
+        ]
+   ] ;
+   sh:select
+    """
+    	SELECT $this ?hname ?name
+         WHERE {
+         ?heater  a hsf:Heater .
+         ?heater hsf:hasShape ?point .
+         ?point  hsf:hasXCoordinate ?hx .
+         ?point  hsf:hasYCoordinate ?hy  .
+         ?heater  schema:name ?hname .
+         $this  schema:name ?name .
+         $this hsf:hasShape ?shape .
+         ?shape hsf:southWestXCoordinate ?swx .
+         ?shape hsf:southWestYCoordinate ?swy .
+         ?shape hsf:northEastXCoordinate ?nex .
+         ?shape hsf:northEastYCoordinate ?ney .
+         FILTER((?hx >= ?swx && ?hy >= ?swy) && (?hx <= ?nex && ?hy <= ?ney))
+    }""" ;
+ ] .
+
+# FIRE EXIT POINTS
+# rule asserting that every emergency exit should have a
+# fire action notice in the surrounding area (fire exit point
+# is represented as an area)
+hsf:fireActionNoticeRule a sh:NodeShape;
+  sh:targetClass hsf:FireExitPoint ;
+  rdfs:comment "Rule checking whether fire exit points are provided with fire action notices";
+  sh:sparql [
+   a          sh:SPARQLConstraint ;
+   sh:message "{?name} has no fire action notice";
+   sh:prefixes [
+     sh:declare [
+                sh:prefix "hsf" ;
+                sh:namespace "http://data.open.ac.uk/kmi/hans/"^^xsd:anyURI ; 
+        ];
+     sh:declare [
+                sh:prefix    "schema" ;
+                sh:namespace "http://schema.org/"^^xsd:anyURI ;
+        ]
+   ] ;
+   sh:select
+    """
+    			SELECT $this ?name WHERE {
+    			$this hsf:hasShape ?shape .
+				?shape hsf:southWestXCoordinate ?swx . 
+		 		?shape hsf:southWestYCoordinate ?swy . 
+		 		?shape hsf:northEastXCoordinate ?nex .
+		 		?shape hsf:northEastYCoordinate ?ney .
+		 		$this schema:name ?name .
+		 		FILTER NOT EXISTS {
+		 		  ?signal a hsf:FireActionNotice .
+		 		  ?signal hsf:hasShape ?point .
+				  ?point  hsf:hasXCoordinate ?sx .
+				  ?point  hsf:hasYCoordinate ?sy .
+				  FILTER((?sx >= ?swx && ?sy >= ?swy) && (?sx <= ?nex && ?sy <= ?ney))
+		 		}
+		}""" ;
+ ] .
+
+# FIRE EXTINGUISHER LABELS
+# rule asserting that every fire extinguisher should have a clear
+# label in the nearby (fire extinguishers are represented as points)
+hsf:fireExtinguisherLabelRule a sh:NodeShape;
+  sh:targetClass hsf:FireExtinguisher ;
+  rdfs:comment "Rule checking whether fire extinguishers are properly labelled";
+  sh:sparql [
+   a          sh:SPARQLConstraint ;
+   sh:message "{?name} has no label nearby";
+   sh:prefixes [
+     sh:declare [
+                sh:prefix "hsf" ;
+                sh:namespace "http://data.open.ac.uk/kmi/hans/"^^xsd:anyURI ; 
+        ];
+     sh:declare [
+                sh:prefix    "schema" ;
+                sh:namespace "http://schema.org/"^^xsd:anyURI ;
+        ];
+      sh:declare [
+                sh:prefix    "math" ;
+                sh:namespace "http://www.w3.org/2005/xpath-functions/math#"^^xsd:anyURI ;
+        ]
+   ] ;
+   sh:select
+    """
+    	SELECT $this ?name WHERE {
+    		$this hsf:hasShape ?point .
+			?point hsf:hasXCoordinate ?fex . 
+		 	?point hsf:hasYCoordinate ?fey .
+		 	$this schema:name ?name .
+		 	FILTER NOT EXISTS {
+		 		?fel a hsf:FireExtinguisherLabel . 
+		 		?fel hsf:hasShape ?felPoint .
+				?felPoint  hsf:hasXCoordinate ?felx .
+				?felPoint  hsf:hasYCoordinate ?fely .
+				FILTER(math:sqrt( math:pow((?fex - ?felx), 2) + math:pow((?fey - ?fely), 2)) < 2)
+		 	}
+		}""" ;
+ ] .

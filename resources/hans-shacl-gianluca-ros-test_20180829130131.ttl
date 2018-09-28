@@ -1,0 +1,154 @@
+@prefix schema: <http://schema.org/> .
+@prefix :      <http://data.open.ac.uk/hans/shacl#> .
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix xsd:   <http://www.w3.org/2001/XMLSchema#> .
+@prefix hsf:   <http://data.open.ac.uk/kmi/hans/> .
+@prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dash:  <http://datashapes.org/dash#> .
+
+hsf:fePoint2Rect  a               hsf:RectShape ;
+        hsf:northEastXCoordinate  1 ;
+        hsf:northEastYCoordinate  1 ;
+        hsf:southWestXCoordinate  0 ;
+        hsf:southWestYCoordinate  0 .
+
+hsf:heater2Point  a         hsf:PointShape ;
+        hsf:hasXCoordinate  14 ;
+        hsf:hasYCoordinate  14 .
+
+hsf:fePoint1Rect  a               hsf:RectShape ;
+        hsf:northEastXCoordinate  11 ;
+        hsf:northEastYCoordinate  11 ;
+        hsf:southWestXCoordinate  8 ;
+        hsf:southWestYCoordinate  9 .
+
+hsf:heater1  a        hsf:Heater ;
+        hsf:hasShape  hsf:heater1Point ;
+        schema:name   "Heater 1" .
+
+hsf:heater3Point  a         hsf:PointShape ;
+        hsf:hasXCoordinate  4 ;
+        hsf:hasYCoordinate  0 .
+
+hsf:fireExt2  a       hsf:FireExtinguisher ;
+        hsf:hasShape  hsf:fireExt2Point ;
+        schema:name   "Fire extinguisher 2" .
+
+hsf:fireExt2Point  a        hsf:PointShape ;
+        hsf:hasXCoordinate  6 ;
+        hsf:hasYCoordinate  6 .
+
+hsf:fireExt1  a       hsf:FireExtinguisher ;
+        hsf:hasShape  hsf:fireExt1Point ;
+        schema:name   "Fire extinguisher 1" .
+
+hsf:playroomRect  a               hsf:RectShape ;
+        hsf:northEastXCoordinate  4.9 ;
+        hsf:northEastYCoordinate  7.11 ;
+        hsf:southWestXCoordinate  6.9 ;
+        hsf:southWestYCoordinate  4.1 .
+
+hsf:fePoint2  a       hsf:FireExitPoint ;
+        hsf:hasShape  hsf:fePoint2Rect ;
+        schema:name   "Fire Exit Point 2" .
+
+hsf:fireExtinguisherLabelRule
+        a               sh:NodeShape ;
+        rdfs:comment    "Rule checking whether fire extinguishers are properly labelled" ;
+        sh:sparql       [ a            sh:SPARQLConstraint ;
+                          sh:message   "{?name} has no label nearby" ;
+                          sh:prefixes  [ sh:declare  [ sh:namespace  "http://www.w3.org/2005/xpath-functions/math#"^^xsd:anyURI ;
+                                                       sh:prefix     "math"
+                                                     ] ;
+                                    sh:declare  [ sh:namespace  "http://schema.org/"^^xsd:anyURI ;
+                                                  sh:prefix     "schema"
+                                                ] ;
+                                    sh:declare  [ sh:namespace  "http://data.open.ac.uk/kmi/hans/"^^xsd:anyURI ;
+                                                  sh:prefix     "hsf"
+                                                ] ] ;
+                          sh:select    "\n    \tSELECT $this ?name WHERE {\n    \t\t$this hsf:hasShape ?point .\n\t\t\t?point hsf:hasXCoordinate ?fex . \n\t\t \t?point hsf:hasYCoordinate ?fey .\n\t\t \t$this schema:name ?name .\n\t\t \tFILTER NOT EXISTS {\n\t\t \t\t?fel a hsf:FireExtinguisherLabel . \n\t\t \t\t?fel hsf:hasShape ?felPoint .\n\t\t\t\t?felPoint  hsf:hasXCoordinate ?felx .\n\t\t\t\t?felPoint  hsf:hasYCoordinate ?fely .\n\t\t\t\tFILTER(math:sqrt( math:pow((?fex - ?felx), 2) + math:pow((?fey - ?fely), 2)) < 2)\n\t\t \t}\n\t\t}"
+                        ] ;
+        sh:targetClass  hsf:FireExtinguisher .
+
+hsf:fePoint1  a       hsf:FireExitPoint ;
+        hsf:hasShape  hsf:fePoint1Rect ;
+        schema:name   "Fire Exit Point 1" .
+
+hsf:fireExtLabel1  a  hsf:FireExtinguisherLabel ;
+        hsf:hasShape  hsf:fireExtLabel1Point ;
+        schema:name   "Fire extinguisher label 1" .
+
+hsf:heater4Point  a         hsf:PointShape ;
+        hsf:hasXCoordinate  10 ;
+        hsf:hasYCoordinate  10 .
+
+hsf:faNotice2  a      hsf:FireActionNotice ;
+        hsf:hasShape  hsf:faNotice2Point ;
+        schema:name   "Fire action notice 2" .
+
+hsf:heater1Point  a         hsf:PointShape ;
+        hsf:hasXCoordinate  3 ;
+        hsf:hasYCoordinate  3 .
+
+hsf:heater4  a        hsf:Heater ;
+        hsf:hasShape  hsf:heater4Point ;
+        schema:name   "Heater 4" .
+
+hsf:faNotice1Point  a       hsf:PointShape ;
+        hsf:hasXCoordinate  30 ;
+        hsf:hasYCoordinate  30 .
+
+hsf:faNotice1  a      hsf:FireActionNotice ;
+        hsf:hasShape  hsf:faNotice1Point ;
+        schema:name   "Fire action notice 1" .
+
+hsf:fireExtLabel1Point
+        a                   hsf:PointShape ;
+        hsf:hasXCoordinate  1.5 ;
+        hsf:hasYCoordinate  1.5 .
+
+hsf:fireExt1Point  a        hsf:PointShape ;
+        hsf:hasXCoordinate  1 ;
+        hsf:hasYCoordinate  1 .
+
+hsf:heater3  a        hsf:Heater ;
+        hsf:hasShape  hsf:heater3Point ;
+        schema:name   "Heater 3" .
+
+hsf:hsf:Heater_2747d718-a5c1-4bf1-8490-0d3dd987e180
+        a             hsf:Heater ;
+        hsf:hasShape  hsf:hsf:Heater_2747d718-a5c1-4bf1-8490-0d3dd987e180_Point ;
+        schema:name   "Heater_2747d718-a5c1-4bf1-8490-0d3dd987e180" .
+
+:heater2  a           hsf:Heater ;
+        hsf:hasShape  hsf:heater2Point ;
+        schema:name   "Heater 2" .
+
+hsf:playroom  a       hsf:HeaterFreeArea ;
+        hsf:hasShape  hsf:playroomRect ;
+        schema:name   "Playroom" .
+
+hsf:faNotice2Point  a       hsf:PointShape ;
+        hsf:hasXCoordinate  10 ;
+        hsf:hasYCoordinate  10 .
+
+hsf:heaterFreeAreaRule
+        a               sh:NodeShape ;
+        rdfs:comment    "Rule checking whether there are electric heaters in electric heaters free area" ;
+        sh:sparql       [ a            sh:SPARQLConstraint ;
+                          sh:message   "{?hname} can't be in {?name}" ;
+                          sh:prefixes  [ sh:declare  [ sh:namespace  "http://data.open.ac.uk/kmi/hans/"^^xsd:anyURI ;
+                                                       sh:prefix     "hsf"
+                                                     ] ;
+                                    sh:declare  [ sh:namespace  "http://schema.org/"^^xsd:anyURI ;
+                                                  sh:prefix     "schema"
+                                                ] ] ;
+                          sh:select    "\n    \tSELECT $this ?hname ?name\n         WHERE {\n         ?heater  a hsf:Heater .\n         ?heater hsf:hasShape ?point .\n         ?point  hsf:hasXCoordinate ?hx .\n         ?point  hsf:hasYCoordinate ?hy  .\n         ?heater  schema:name ?hname .\n         $this  schema:name ?name .\n         $this hsf:hasShape ?shape .\n         ?shape hsf:southWestXCoordinate ?swx .\n         ?shape hsf:southWestYCoordinate ?swy .\n         ?shape hsf:northEastXCoordinate ?nex .\n         ?shape hsf:northEastYCoordinate ?ney .\n         FILTER((?hx >= ?swx && ?hy >= ?swy) && (?hx <= ?nex && ?hy <= ?ney))\n    }"
+                        ] ;
+        sh:targetClass  hsf:HeaterFreeArea .
+
+hsf:hsf:Heater_2747d718-a5c1-4bf1-8490-0d3dd987e180_Point
+        a                   hsf:PointShape ;
+        hsf:hasXCoordinate  -2.573388 ;
+        hsf:hasYCoordinate  1.289935 .
