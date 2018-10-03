@@ -69,7 +69,7 @@ public class JenaSemanticMapServer {
 				    	
 				    	if(choice.equals("y")) {
 				    		try {
-								server.kbInterface.saveKBSnapshot(server.getKbFile());
+								server.kbInterface.saveKBSnapshot(server.getInstancesFile());
 							} catch (IOException e) {
 								System.out.println("Unable to save kb snapshot.");
 								choice = "";
@@ -98,10 +98,12 @@ public class JenaSemanticMapServer {
 	public static Logger logger = LoggerFactory.getLogger(testJenaSHACL.class);
 	public static Model dataModel;
 	private int port = 7070;
-	private String kbFile = "./resources/hans-complete-0.1.ttl";
 	private Server server;
 	private KBInterface kbInterface;
 	private SemanticMapModelChangedListener modelListener;
+	private String ontologyFile = "./resources/hans-ontology.ttl";
+	private String rulesFile = "./resources/hans-rules.ttl";
+	private String instancesFile = "./resources/hans-instances.ttl";
 	
 	JenaSemanticMapServer(String configFile) throws IOException, SQLException {
 		
@@ -120,9 +122,25 @@ public class JenaSemanticMapServer {
 			System.out.println("Using default port 7070");
 		}
 		
-		if(prop.containsKey("kb_name")) {
-			this.kbFile = prop.getProperty("kb_name");
-			System.out.println("Using kb " + this.kbFile);
+		if(prop.containsKey("ontology_file")) {
+			this.ontologyFile = prop.getProperty("ontology_file");
+			System.out.println("Using ontology " + this.ontologyFile);
+		}
+		else {
+			System.out.println("Using default kb ./resources/hans-shacl.ttl");
+		}
+		
+		if(prop.containsKey("rules_file")) {
+			this.rulesFile = prop.getProperty("rules_file");
+			System.out.println("Using rules " + this.rulesFile);
+		}
+		else {
+			System.out.println("Using default kb ./resources/hans-shacl.ttl");
+		}
+		
+		if(prop.containsKey("instances_file")) {
+			this.instancesFile = prop.getProperty("instances_file");
+			System.out.println("Using kb instances " + this.instancesFile);
 		}
 		else {
 			System.out.println("Using default kb ./resources/hans-shacl.ttl");
@@ -130,8 +148,13 @@ public class JenaSemanticMapServer {
 		
 		System.out.println("Loading kb");
 		dataModel = JenaUtil.createMemoryModel();
-		InputStream in = new FileInputStream(new File(this.kbFile));
-		dataModel.read(in, null, FileUtils.langTurtle);
+		InputStream inOntology = new FileInputStream(new File(this.ontologyFile));
+		dataModel.read(inOntology, null, FileUtils.langTurtle);
+		InputStream inRules = new FileInputStream(new File(this.rulesFile));
+		dataModel.read(inRules, null, FileUtils.langTurtle);
+		InputStream inInstances = new FileInputStream(new File(this.instancesFile));
+		dataModel.read(inInstances, null, FileUtils.langTurtle);
+		
 		this.modelListener = new SemanticMapModelChangedListener();
 		dataModel.register(this.modelListener);
 		this.kbInterface = new KBInterface(dataModel, new GeometryFactory(), new WKTWriter(3));
@@ -283,16 +306,16 @@ public class JenaSemanticMapServer {
 		}
 	}
 
-	public String getKbFile() {
-		return kbFile;
-	}
-
-	public void setKbFile(String kbFile) {
-		this.kbFile = kbFile;
-	}
-
 	public static Model getDataModel() {
 		return dataModel;
+	}
+
+	public String getInstancesFile() {
+		return instancesFile;
+	}
+
+	public void setInstancesFile(String instancesFile) {
+		this.instancesFile = instancesFile;
 	}
 
 }

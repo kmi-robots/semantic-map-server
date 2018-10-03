@@ -1,0 +1,174 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix hsf: <http://data.open.ac.uk/kmi/hans#> .
+@prefix ros: <http://data.open.ac.uk/kmi/ros#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix geo: <http://www.opengis.net/ont/geosparql#> .
+@prefix sh:    <http://www.w3.org/ns/shacl#> .
+@prefix geof: <http://www.opengis.net/def/function/geosparql/> .
+
+# SHACL STRUCTURAL CONSTRAINTS
+hsf:EntityShape a sh:NodeShape ;
+	sh:targetClass hsf:Entity ;
+	sh:property [
+		sh:description "A hsf:Entity must have one and only one timestamp, corresponding to the time when the entity has been inserted in the KB" ;
+		sh:path hsf:hasTimestamp ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:unsignedLong ;
+	] ;
+	sh:property [
+		sh:description "A hsf:Entity can have a unique id, when it the product of an Identification process" ;
+		sh:path hsf:hasId ;
+		sh:datatype xsd:string ;
+	] ;
+	sh:property [
+		sh:description "A hsf:Entity must have a geometry of type geo:Geometry" ;
+		sh:path geo:hasGeometry ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:class geo:Geometry ;
+	] .
+
+hsf:PointHavePoseShape a sh:NodeShape ;
+	sh:description "Each entity which has a geo:Geometry that is a geo:Point, must have a ros:Pose" ;
+	sh:target [
+		a sh:SPARQLTarget ;
+		sh:prefixes [ 
+			sh:declare [
+				sh:prefix "geo" ;
+				sh:namespace "http://www.opengis.net/ont/geosparql#"^^xsd:anyURI ;
+			] ;
+			sh:declare [
+				sh:prefix "hsf" ;
+				sh:namespace "http://data.open.ac.uk/kmi/hans#"^^xsd:anyURI ;
+			] ;
+			sh:declare [
+				sh:prefix "rdfs" ;
+				sh:namespace "http://www.w3.org/2000/01/rdf-schema#"^^xsd:anyURI ;
+			] ;
+			sh:declare [
+				sh:prefix "rdf" ;
+				sh:namespace "http://www.w3.org/1999/02/22-rdf-syntax-ns#"^^xsd:anyURI ;
+			]
+		 ] ;
+		sh:select """
+			SELECT ?this
+			WHERE {
+				?this rdf:type/rdfs:subClassOf* hsf:Entity .
+				?this geo:hasGeometry ?c .
+				?c rdf:type/rdfs:subClassOf* geo:Point .
+			}
+			""" ;
+	] ;
+	sh:property [
+		sh:description "" ;
+		sh:path hsf:hasPose ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:class ros:Pose ;
+	] .
+
+ros:PoseShape a sh:NodeShape ;
+	sh:targetClass ros:Pose ;
+	sh:property [
+		sh:description "A ros:Pose must have one Position of class geo:Point" ;
+		sh:path ros:hasPosition ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:class geo:Point ;
+	] ;
+	sh:property [
+		sh:description "A ros:Pose must have one Orientation of class ros:Quaternion" ;
+		sh:path ros:hasOrientation ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:class ros:Quaternion ;
+	] .
+	
+ros:QuaternionShape a sh:NodeShape ;
+	sh:targetClass ros:Quaternion ;
+	sh:property [
+		sh:description "A ros:Quaternion must have one X of type double" ;
+		sh:path ros:hasX ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	] ;
+	sh:property [
+		sh:description "A ros:Quaternion must have one Y of type double" ;
+		sh:path ros:hasY ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	] ;
+		sh:property [
+		sh:description "A ros:Quaternion must have one Z of type double" ;
+		sh:path ros:hasZ ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	] ;
+		sh:property [
+		sh:description "A ros:Quaternion must have one W of type double" ;
+		sh:path ros:hasW ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype xsd:double ;
+	]  .
+	
+geo:PointShape a sh:NodeShape ;
+	sh:targetClass geo:Point ;
+	sh:property [
+		sh:description "A geo:Point must have a wkt string starting with POINT" ;
+		sh:path geo:asWKT ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype geo:WktLiteral ;
+		sh:pattern "^\\s*POINT" ;
+	] .
+	
+geo:LineStringShape a sh:NodeShape ;
+	sh:targetClass geo:LineString ;
+	sh:property [
+		sh:description "A geo:LineString must have a wkt string starting with LINESTRING" ;
+		sh:path geo:asWKT ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype geo:WktLiteral ;
+		sh:pattern "^\\s*LINESTRING" ;
+	] .
+	
+geo:PolygonShape a sh:NodeShape ;
+	sh:targetClass geo:Polygon ;
+	sh:property [
+		sh:description "A geo:Polygon must have a wkt string starting with POLYGON" ;
+		sh:path geo:asWKT ;
+		sh:maxCount 1 ;
+		sh:minCount 1 ;
+		sh:datatype geo:WktLiteral ;
+		sh:pattern "^\\s*POLYGON" ;
+	] .
+	
+# SMALL TAXONOMY
+hsf:Entity rdfs:subClassOf owl:Class .
+
+# GENERAL CATEGORIES OF ENTITIES IN OUR DOMAIN
+hsf:Object rdfs:subClassOf hsf:Entity .
+hsf:Area rdfs:subClassOf hsf:Entity .
+hsf:Connection rdfs:subClassOf hsf:Entity .
+
+[]  rdf:type     owl:AllDisjointClasses ;
+	owl:members ( hsf:Object hsf:Connection hsf:Area ) .
+
+ros:Geometry rdfs:subClassOf owl:Class .
+ros:GeometricProperty rdfs:subClassOf owl:Class .
+
+ros:Pose rdfs:subClassOf ros:GeometricProperty .
+ros:Quaternion rdfs:subClassOf ros:Geometry .
+
+geo:Point rdfs:subClassOf geo:Geometry .
+geo:LineString rdfs:subClassOf geo:Geometry .
+geo:Polygon rdfs:subClassOf geo:Geometry .

@@ -22,6 +22,8 @@ curl -X GET -G http://127.0.0.1:7070/query/entity --data-urlencode "entity_uri=h
 
 curl -X DELETE -G http://127.0.0.1:7070/delete/entity --data-urlencode "entity_uri=http://data.open.ac.uk/kmi/hans#Heater_308e1795-2cff-4a4a-beb4-92100681bf11" 
 
+curl -X GET -G http://127.0.0.1:7070//query/list/entities --data-urlencode "class=http://data.open.ac.uk/kmi/hans#Heater" 
+
 # Insert (heater free) area, and then an heater, and then validate
 curl -X POST http://127.0.0.1:7070/insert/entity -d "json={\"category\":\"area\", \"class\":\"HeaterFreeArea\", \"id\":\"Playroom\", \"timestamp\":1535983132000, \"geometry\":{\"geom_class\":\"area\", \"points\":[{\"x\":-3.0, \"y\":-3.0, \"z\":0.0},{\"x\":3.0, \"y\":-3.0, \"z\":0.0},{\"x\":3.0, \"y\":3.0, \"z\":0.0},{\"x\":-3.0, \"y\":3.0, \"z\":0.0},{\"x\":-3.0, \"y\":-3.0, \"z\":0.0}]}}"
 curl -X POST http://127.0.0.1:7070/insert/entity -d "json={\"category\":\"object\", \"class\":\"Heater\", \"timestamp\":1535983132000, \"geometry\":{\"geom_class\":\"point\", \"pose\":{\"position\":{\"x\":0.0, \"y\":0.0, \"z\":0.0}, \"orientation\":{\"x\":0.0, \"y\":0.0, \"z\":0.0, \"w\":1.0}}}}"
