@@ -1,0 +1,28 @@
+/insert/entity
+/delete/entity
+
+/submit/sensing
+
+/query/entity
+
+/query/list/entities
+/query/list/rules
+/query/list/rule-waypoints
+
+/validate
+/validate/rule
+
+ALL THE SPATIAL RELATIONS
+/sr/list/contains	args: instance
+/sr/contains	args: instance1, instance2
+/sr/list/overlaps	args: instance
+/sr/overlaps	args: instance1, instance2
+...
+
+ADVANCED SPATIAL RELATIONS (RELATED FUNCTIONS TO BE IMPLEMENTED)
+/sr/list/right-of	args: por_instance, [pow]
+/sr/right-of	args: por_instance, instance,
+/sr/list/left-of	args: por_instance, [pow]
+/sr/left-of	args: por_instance, instance,
+/sr/list/top-of	args: por_instance, [pow]
+/sr/top-of	args: por_instance, instance,

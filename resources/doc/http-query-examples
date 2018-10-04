@@ -20,7 +20,7 @@ curl -X GET -G http://127.0.0.1:7070/query/entity --data-urlencode "entity_uri=h
 
 curl -X GET -G http://127.0.0.1:7070/query/entity --data-urlencode "entity_uri=http://data.open.ac.uk/kmi/hans#Heater_f39a621d-a90e-47b4-8acd-170550991520" 
 
-curl -X DELETE -G http://127.0.0.1:7070/delete/entity --data-urlencode "entity_uri=http://data.open.ac.uk/kmi/hans#Heater_308e1795-2cff-4a4a-beb4-92100681bf11" 
+curl -X DELETE -G http://127.0.0.1:7070/delete/entity --data-urlencode "entity_uri=http://data.open.ac.uk/kmi/hans#	Heater_6b09502f-f2d4-4b6b-a36d-7d3225e4d048" 
 
 curl -X GET -G http://127.0.0.1:7070//query/list/entities --data-urlencode "class=http://data.open.ac.uk/kmi/hans#Heater" 
 
