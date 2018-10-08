@@ -19,43 +19,113 @@ hsf:Room rdfs:subClassOf hsf:Area .
 hsf:HeaterFreeArea rdfs:subClassOf hsf:Area . 
 
 
-# INSTANCES 
-hsf:Playroom a hsf:HeaterFreeArea ;          
-    schema:name  "Playroom" ;
+# INSTANCES
+# HEATER FREE AREAS
+hsf:CommonRoom a hsf:HeaterFreeArea ;          
+    schema:name  "Common Room" ;
+    hsf:hasTimestamp "10"^^xsd:unsignedLong ;
+	geo:hasGeometry hsf:Polygon_1 .
+       
+hsf:Polygon_1 a geo:Polygon ; 
+	geo:asWKT "POLYGON((16 7, 16 3.88, 28.9 3.88, 28.9 1.94, 24.9 1.94, 24.9 7, 16 7))"^^geo:WktLiteral .
+	
+hsf:RoboticsLab a hsf:HeaterFreeArea ;          
+    schema:name  "Robotics Lab" ;
+    hsf:hasTimestamp "10"^^xsd:unsignedLong ;
+	geo:hasGeometry hsf:Polygon_2 .
+       
+hsf:Polygon_2 a geo:Polygon ; 
+	geo:asWKT "POLYGON((-12.5 16.7 0, -12.5 2.19 0, 3.25 2.19 0, 3.25 16.7 0, -12.5 16.7 0))"^^geo:WktLiteral .
+	
+hsf:MeetingRoom a hsf:HeaterFreeArea ;          
+    schema:name  "Meeting Room" ;
     hsf:hasTimestamp "10"^^xsd:unsignedLong ;
 	geo:hasGeometry hsf:Polygon_3 .
-
-hsf:Polygon_3 a geo:Polygon ;
-	geo:asWKT "POLYGON((0 0 0, 4 0 0, 4 4 0, 0 4 0, 0 0 0))"^^geo:WktLiteral .
-
-hsf:Activity2 a hsf:HeaterFreeArea ;          
-    schema:name  "Activity 2" ;
+       
+hsf:Polygon_3 a geo:Polygon ; 
+	geo:asWKT "POLYGON((14.5 19, 14.5 9.41, 36.2 9.41, 36.2 19, 14.5 19))"^^geo:WktLiteral .
+	
+# FIRE EXIT POINTS
+hsf:FireExitPointNorth a hsf:FireExitPoint ;          
+    schema:name  "Fire Exit Point North" ;
     hsf:hasTimestamp "10"^^xsd:unsignedLong ;
 	geo:hasGeometry hsf:Polygon_4 .
        
 hsf:Polygon_4 a geo:Polygon ; 
-	geo:asWKT "POLYGON((0 -9 0, 3 -9 0, 3 -1.5 0, 0 -1.5 0, 0 -9 0))"^^geo:WktLiteral .
+	geo:asWKT "POLYGON((-5.31 23.1, -5.31 21.2, -1.13 21.2, -1.13 23.1, -5.31 23.1))"^^geo:WktLiteral .	
 	
-hsf:PodiumBack a hsf:HeaterFreeArea ;          
-    schema:name  "Podium Back" ;
+hsf:FireExitPointEast a hsf:FireExitPoint ;          
+    schema:name  "Fire Exit Point East" ;
     hsf:hasTimestamp "10"^^xsd:unsignedLong ;
 	geo:hasGeometry hsf:Polygon_5 .
        
 hsf:Polygon_5 a geo:Polygon ; 
-	geo:asWKT "POLYGON( (-34.5 -8 0, -32.9 -8 0, -32.9 -3.7 0, -34.5 -3.7 0, -34.5 -8 0))"^^geo:WktLiteral .
+	geo:asWKT "POLYGON((26.1 9.27, 26.1 7.13, 28.9 7.13, 28.9 9.27, 26.1 9.27))"^^geo:WktLiteral .
 	
-hsf:MainEntrance a hsf:FireExitPoint ;          
-    schema:name  "KMi Main Entrance" ;
-    hsf:hasTimestamp "10"^^xsd:unsignedLong ;
-	geo:hasGeometry hsf:Polygon_6 .
-       
-hsf:Polygon_6 a geo:Polygon ; 
-	geo:asWKT "POLYGON((20 -5.3 0, 21.2 -5.3 0, 21.2 -3 0, 20 -3 0, 20 -5.3 0))"^^geo:WktLiteral .	
+#FIRE EXTINGUISHER
+hsf:FireExtinguisher_1 a hsf:FireExtinguisher ;
+	schema:name "Fire Extinguisher 1" ;
+	hsf:hasTimestamp "10"^^xsd:unsignedLong ;
+	hsf:hasPose hsf:Pose_1 ;
+	geo:hasGeometry hsf:Point_1 .
+
+hsf:Point_1 a geo:Point ;
+	geo:asWKT "POINT(-0.39 23.5 0)"^^geo:WktLiteral .
+
+ros:Position_1 rdf:type geo:Point ;
+	geo:asWKT "POINT(-0.39 23.5 0)"^^geo:WktLiteral .
+
+ros:Quaternion_1 rdf:type ros:Quaternion ;
+	ros:hasX "0"^^xsd:double ; 
+	ros:hasY "0"^^xsd:double ;
+	ros:hasZ "0"^^xsd:double ;
+	ros:hasW "1.0"^^xsd:double .
 	
-hsf:PodiumEntrance a hsf:FireExitPoint ;          
-    schema:name  "Podium Entrance" ;
-    hsf:hasTimestamp "10"^^xsd:unsignedLong ;
-	geo:hasGeometry hsf:Polygon_7 .
-       
-hsf:Polygon_7 a geo:Polygon ; 
-	geo:asWKT "POLYGON((-33 -20.8 0, -31.8 -20.8 0, -31.8 -19 0, -33 -19 0, -33 -20.8 0))"^^geo:WktLiteral .
+hsf:Pose_1 rdf:type ros:Pose ;
+	ros:hasPosition ros:Position_1 ;
+	ros:hasOrientation ros:Quaternion_1 .
+
+hsf:FireExtinguisher_2 a hsf:FireExtinguisher ;
+	schema:name "Fire Extinguisher 2" ;
+	hsf:hasTimestamp "10"^^xsd:unsignedLong ;
+	hsf:hasPose hsf:Pose_2 ;
+	geo:hasGeometry hsf:Point_2 .
+
+hsf:Point_2 a geo:Point ;
+	geo:asWKT "POINT(21.7 19.5 0)"^^geo:WktLiteral .
+
+ros:Position_2 rdf:type geo:Point ;
+	geo:asWKT "POINT(21.7 19.5 0)"^^geo:WktLiteral .
+
+ros:Quaternion_2 rdf:type ros:Quaternion ;
+	ros:hasX "0"^^xsd:double ; 
+	ros:hasY "0"^^xsd:double ;
+	ros:hasZ "0"^^xsd:double ;
+	ros:hasW "1.0"^^xsd:double .
+	
+hsf:Pose_2 rdf:type ros:Pose ;
+	ros:hasPosition ros:Position_2 ;
+	ros:hasOrientation ros:Quaternion_2 .
+	
+
+hsf:FireExtinguisher_3 a hsf:FireExtinguisher ;
+	schema:name "Fire Extinguisher 3" ;
+	hsf:hasTimestamp "10"^^xsd:unsignedLong ;
+	hsf:hasPose hsf:Pose_3 ;
+	geo:hasGeometry hsf:Point_3 .
+
+hsf:Point_3 a geo:Point ;
+	geo:asWKT "POINT(14.6 8.66 0)"^^geo:WktLiteral .
+
+ros:Position_3 rdf:type geo:Point ;
+	geo:asWKT "POINT(14.6 8.66 0)"^^geo:WktLiteral .
+
+ros:Quaternion_3 rdf:type ros:Quaternion ;
+	ros:hasX "0"^^xsd:double ; 
+	ros:hasY "0"^^xsd:double ;
+	ros:hasZ "0"^^xsd:double ;
+	ros:hasW "1.0"^^xsd:double .
+	
+hsf:Pose_3 rdf:type ros:Pose ;
+	ros:hasPosition ros:Position_3 ;
+	ros:hasOrientation ros:Quaternion_3 .
