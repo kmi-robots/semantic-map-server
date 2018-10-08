@@ -27,7 +27,7 @@ hsf:CommonRoom a hsf:HeaterFreeArea ;
 	geo:hasGeometry hsf:Polygon_1 .
        
 hsf:Polygon_1 a geo:Polygon ; 
-	geo:asWKT "POLYGON((16 7, 16 3.88, 28.9 3.88, 28.9 1.94, 24.9 1.94, 24.9 7, 16 7))"^^geo:WktLiteral .
+	geo:asWKT "POLYGON((16 7, 16 -3.88, 28.9 -3.88, 28.9 1.94, 24.9 1.94, 24.9 7, 16 7))"^^geo:WktLiteral .
 	
 hsf:RoboticsLab a hsf:HeaterFreeArea ;          
     schema:name  "Robotics Lab" ;
