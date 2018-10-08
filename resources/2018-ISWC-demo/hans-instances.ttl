@@ -35,7 +35,7 @@ hsf:RoboticsLab a hsf:HeaterFreeArea ;
 	geo:hasGeometry hsf:Polygon_2 .
        
 hsf:Polygon_2 a geo:Polygon ; 
-	geo:asWKT "POLYGON((-12.5 16.7 0, -12.5 2.19 0, 3.25 2.19 0, 3.25 16.7 0, -12.5 16.7 0))"^^geo:WktLiteral .
+	geo:asWKT "POLYGON((-12.5 16.7, -12.5 2.19, 3.25 2.19, 3.25 16.7, -12.5 16.7))"^^geo:WktLiteral .
 	
 hsf:MeetingRoom a hsf:HeaterFreeArea ;          
     schema:name  "Meeting Room" ;
@@ -70,10 +70,10 @@ hsf:FireExtinguisher_1 a hsf:FireExtinguisher ;
 	geo:hasGeometry hsf:Point_1 .
 
 hsf:Point_1 a geo:Point ;
-	geo:asWKT "POINT(-0.39 23.5 0)"^^geo:WktLiteral .
+	geo:asWKT "POINT(-0.39 23.5)"^^geo:WktLiteral .
 
 ros:Position_1 rdf:type geo:Point ;
-	geo:asWKT "POINT(-0.39 23.5 0)"^^geo:WktLiteral .
+	geo:asWKT "POINT(-0.39 23.5)"^^geo:WktLiteral .
 
 ros:Quaternion_1 rdf:type ros:Quaternion ;
 	ros:hasX "0"^^xsd:double ; 
@@ -92,10 +92,10 @@ hsf:FireExtinguisher_2 a hsf:FireExtinguisher ;
 	geo:hasGeometry hsf:Point_2 .
 
 hsf:Point_2 a geo:Point ;
-	geo:asWKT "POINT(21.7 19.5 0)"^^geo:WktLiteral .
+	geo:asWKT "POINT(21.7 19.5)"^^geo:WktLiteral .
 
 ros:Position_2 rdf:type geo:Point ;
-	geo:asWKT "POINT(21.7 19.5 0)"^^geo:WktLiteral .
+	geo:asWKT "POINT(21.7 19.5)"^^geo:WktLiteral .
 
 ros:Quaternion_2 rdf:type ros:Quaternion ;
 	ros:hasX "0"^^xsd:double ; 
@@ -115,10 +115,10 @@ hsf:FireExtinguisher_3 a hsf:FireExtinguisher ;
 	geo:hasGeometry hsf:Point_3 .
 
 hsf:Point_3 a geo:Point ;
-	geo:asWKT "POINT(14.6 8.66 0)"^^geo:WktLiteral .
+	geo:asWKT "POINT(14.6 8.66)"^^geo:WktLiteral .
 
 ros:Position_3 rdf:type geo:Point ;
-	geo:asWKT "POINT(14.6 8.66 0)"^^geo:WktLiteral .
+	geo:asWKT "POINT(14.6 8.66)"^^geo:WktLiteral .
 
 ros:Quaternion_3 rdf:type ros:Quaternion ;
 	ros:hasX "0"^^xsd:double ; 
