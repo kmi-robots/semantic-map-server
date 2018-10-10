@@ -28,11 +28,14 @@ public class Distance extends FunctionBase2 {
 		Geometry v1Geom = KBUtils.getGeometryFromResource(v1Resource, model, wktReader);
 		Geometry v2Geom = KBUtils.getGeometryFromResource(v2Resource, model, wktReader);
 		
+		
+		
 		if(v1Geom == null || v2Geom == null) {
 			throw new PropertyNotFoundException(model.getProperty(Namespaces.geosparqlPrefix + "asWKT"));
 		}
 		
 		double distance = v1Geom.distance(v2Geom);
+		System.out.println(distance);
 		return new NodeValueDouble(distance);
 
 	}

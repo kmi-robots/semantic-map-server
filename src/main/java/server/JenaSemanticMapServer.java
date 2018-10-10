@@ -43,6 +43,7 @@ import sparql.functions.Contains;
 import sparql.functions.Covers;
 import sparql.functions.Crosses;
 import sparql.functions.Disjoint;
+import sparql.functions.Distance;
 import sparql.functions.Equals;
 import sparql.functions.Intersects;
 import sparql.functions.Overlaps;
@@ -192,6 +193,9 @@ public class JenaSemanticMapServer {
 		FunctionRegistry.get().put("http://data.open.ac.uk/kmi/hans#within", Within.class);		
 		Within.model = dataModel;
 		Within.wktReader = wktReader;
+		FunctionRegistry.get().put("http://data.open.ac.uk/kmi/hans#distance", Distance.class);
+		Distance.model = dataModel;
+		Distance.wktReader = wktReader;
 	}
 	
 	private void initialiseServer() {

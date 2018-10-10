@@ -45,15 +45,15 @@ public class FakeRobotTester {
 			
 			// playroom coordinates (0 0, 4 0, 4 4, 0 4, 0 0)
 			ArrayList<GeometricEntity> playroomObjects = generatePlayroomObjects(gf);
-			navigateAndCheck("Playroom", playroomObjects, 10000);
+			navigateAndCheck("Playroom", playroomObjects, 2000);
 						
 			// activity2 coordinates (0 -9, 3 -9, 3 -1.5, 0 -1.5, 0 -9)
 			ArrayList<GeometricEntity> activity2Objects = generateActivity2Objects(gf);
-			navigateAndCheck("Activity 2", activity2Objects, 6000);
+			navigateAndCheck("Activity 2", activity2Objects, 4000);
 			
 			// KMi main entrance coordinates (20 -5.3, 21.2 -5.3, 21.2 -3, 20 -3, 20 -5.3)
 			ArrayList<GeometricEntity> mainEntranceObjects = generateKMIEntranceObjects(gf);
-			navigateAndCheck("KMi main entrance", mainEntranceObjects, 7000);
+			navigateAndCheck("KMi main entrance", mainEntranceObjects, 4000);
 			
 			// Podium entrance coordinates (-33 -20.8, -31.8 -20.8, -31.8 -19, -33 -19, -33 -20.8)
 			ArrayList<GeometricEntity> podiumEntranceObjects = generatePodiumEntranceObjects(gf);
