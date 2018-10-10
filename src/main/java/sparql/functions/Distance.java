@@ -35,7 +35,6 @@ public class Distance extends FunctionBase2 {
 		}
 		
 		double distance = v1Geom.distance(v2Geom);
-		System.out.println(distance);
 		return new NodeValueDouble(distance);
 
 	}
